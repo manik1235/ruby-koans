@@ -37,6 +37,8 @@ class AboutNil < Neo::Koan
     #   my answer is obj.nil? is better
     #   but why... 
     #   I'm really not sure....
+    #   Per https://stackoverflow.com/questions/1972266/obj-nil-vs-obj-nil#1972305
+    #       they're about the same, except that obj.nil? is faster.
   end
 
 end
