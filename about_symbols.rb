@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 class AboutSymbols < Neo::Koan
   def test_symbols_are_symbols
     symbol = :ruby
-    assert_equal __, symbol.is_a?(Symbol)
+    assert_equal true, symbol.is_a?(Symbol)
   end
 
   def test_symbols_can_be_compared
@@ -11,27 +11,37 @@ class AboutSymbols < Neo::Koan
     symbol2 = :a_symbol
     symbol3 = :something_else
 
-    assert_equal __, symbol1 == symbol2
-    assert_equal __, symbol1 == symbol3
+    assert_equal true, symbol1 == symbol2
+    assert_equal false, symbol1 == symbol3
   end
 
   def test_identical_symbols_are_a_single_internal_object
     symbol1 = :a_symbol
     symbol2 = :a_symbol
 
-    assert_equal __, symbol1           == symbol2
-    assert_equal __, symbol1.object_id == symbol2.object_id
+    assert_equal true, symbol1           == symbol2
+    assert_equal true, symbol1.object_id == symbol2.object_id
   end
 
   def test_method_names_become_symbols
     symbols_as_strings = Symbol.all_symbols.map { |x| x.to_s }
-    assert_equal __, symbols_as_strings.include?("test_method_names_become_symbols")
+    assert_equal true, symbols_as_strings.include?("test_method_names_become_symbols")
   end
 
   # THINK ABOUT IT:
   #
   # Why do we convert the list of symbols to strings and then compare
   # against the string value rather than against symbols?
+  #   I have no idea. I tested it with a symbol and it worked...
+  #   https://stackoverflow.com/questions/4686097/ruby-koans-why-convert-list-of-symbols-to-strings#4686157
+  #     Per this answer, it's because since a symbol exists only once, you have to switch to strings first.
+  #     If you do something like "Symbol.all_symbols.include?(:asdf)", it'll always be true because you just
+  #     created the symbol ":asdf" while making the comparison. You may be able to do this though...
+  #     all_symbols_as_symbols = Symbol.all_symbols
+  #     all_symbols_as_symbols.include?(:asdf)
+  #     to see if it existed at the time, but then of course it gets created and so it would erroneously pass
+  #     the next time. I'll try this out anyway.
+  #       Success, per IRB. false the first time, true after the second assignment, since it gets created.
 
   in_ruby_version("mri") do
     RubyConstant = "What is the sound of one hand clapping?"
